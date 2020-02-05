@@ -13,5 +13,5 @@ deploy:
   acl: public_read
   cache_control: "no-cache"
   on:
-    repo: alpheios-project/lexis-cs
+    repo: alpheios-project/alpheios-messaging
     branch: master
