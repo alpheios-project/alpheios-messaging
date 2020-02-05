@@ -1,0 +1,92 @@
+{
+  "name": "alpheios-messaging",
+  "version": "1.0.0",
+  "description": "A messaging service for Alpheios Tools",
+  "type": "module",
+  "module": "index.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "build-prod": "npm run lint && node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs webpack production lib config.mjs",
+    "build-dev": "npm run lint && node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs webpack development lib config.mjs",
+    "lint": "eslint --fix ./src/**/*.js",
+    "lint-nofix": "eslint ./src/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alpheios-project/alpheios-messaging.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alpheios-project/alpheios-messaging/issues"
+  },
+  "homepage": "https://github.com/alpheios-project/alpheios-messaging#readme",
+  "engines": {
+    "node": ">= 13.2.0",
+    "npm": ">= 6.9.0"
+  },
+  "jest": {
+    "verbose": true,
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "!node_modules/"
+    ],
+    "moduleNameMapper": {
+      "^@messServ[/](.+)": "<rootDir>/src/$1"
+    },
+    "moduleFileExtensions": [
+      "js"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "standard",
+      "plugin:jsdoc/recommended",
+      "plugin:vue/essential"
+    ],
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "parserOptions": {
+      "parser": "babel-eslint",
+      "ecmaVersion": 2019,
+      "sourceType": "module",
+      "allowImportExportEverywhere": true
+    },
+    "rules": {
+      "no-prototype-builtins": "off",
+      "dot-notation": "off"
+    }
+  },
+  "eslintIgnore": [
+    "**/dist",
+    "**/support"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/runtime": "^7.8.3",
+    "alpheios-node-build": "github:alpheios-project/node-build",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-jsdoc": "^21.0.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.1.2",
+    "eslint-scope": "^5.0.0",
+    "jest": "^25.1.0",
+    "uuid": "^3.4.0",
+    "webpack": "^4.41.5"
+  },
+  "dependencies": {}
+}
