@@ -938,4 +938,4 @@ ResponseMessage.responseCodes = {
 
 /******/ });
 });
-//# sourceMappingURL=messaging-service.js.map
+//# sourceMappingURL=alpheios-messaging.js.map

@@ -14,14 +14,14 @@ const webpack = {
   production: {
     output: {
       path: path.join(projectRoot, 'dist/prod'),
-      filename: 'messaging-service.min.js'
+      filename: 'alpheios-messaging.min.js'
     }
   },
 
   development: {
     output: {
       path: path.join(projectRoot, 'dist/dev'),
-      filename: 'messaging-service.js'
+      filename: 'alpheios-messaging.js'
     }
   }
 }
