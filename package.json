@@ -1,10 +1,8 @@
 {
   "name": "alpheios-messaging",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A messaging service for Alpheios Tools",
-  "type": "module",
-  "module": "index.js",
-  "main": "index.js",
+  "main": "dist/prod/alpheios-messaging.min.js",
   "scripts": {
     "test": "jest --coverage",
     "build": "npm run build-dev && npm run build-prod",
