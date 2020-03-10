@@ -37,6 +37,10 @@ export default class Message {
      */
     this.body = body
   }
+
+  static isKnownType (typeValue) {
+    return Object.values(Message.types).includes(typeValue)
+  }
 }
 
 /**
@@ -49,7 +53,10 @@ Message.roles = {
 
 /**
  * Specifies a message type: what kind of message it is and what purpose it serves.
+ * Message types are used to distinguish different types of messages from each other
+ * and to distinguish Alpheios from non-Alpheios messages. All Alpheios messages
+ * must start from an `ALPHEIOS_` prefix.
  */
 Message.types = {
-  GENERIC: 'Generic'
+  GENERIC: 'ALPHEIOS_MESSAGE' // A generic message of general purpose
 }

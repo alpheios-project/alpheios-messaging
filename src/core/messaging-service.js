@@ -1,6 +1,7 @@
 /**
  * @module MessagingService
  */
+import Message from '@messServ/messages/message.js'
 import ResponseMessage from '@messServ/messages/response-message.js'
 import StoredRequest from '@messServ/core/stored-request.js'
 
@@ -123,6 +124,11 @@ export default class MessagingService {
    * @param {ResponseMessage} message - An incoming response message.
    */
   dispatchMessage (message) {
+    console.info('Dispatch message is called')
+    if (!Message.isKnownType(message.type)) {
+      // Ignore messages that we do not support
+      return
+    }
     if (!ResponseMessage.isResponse(message)) {
       console.error('A message not following a response format will be ignored:', message)
       return

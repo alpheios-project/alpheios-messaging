@@ -41,4 +41,12 @@ describe('Message class', () => {
   it('Message: must have type definitions', () => {
     expect(Object.keys(Message.types)).toMatchObject(['GENERIC'])
   })
+
+  it('isKnownType: must recognize a known message type', () => {
+    expect(Message.isKnownType('ALPHEIOS_MESSAGE')).toBeTruthy()
+  })
+
+  it('isKnownType: must fail on an unknown message type', () => {
+    expect(Message.isKnownType('UNKNOWN_MESSAGE')).toBeFalsy()
+  })
 })

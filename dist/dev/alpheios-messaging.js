@@ -287,11 +287,13 @@ const CedictDestinationConfig = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MessagingService; });
-/* harmony import */ var _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/messages/response-message.js */ "./src/messages/response-message.js");
-/* harmony import */ var _messServ_core_stored_request_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @messServ/core/stored-request.js */ "./src/core/stored-request.js");
+/* harmony import */ var _messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/messages/message.js */ "./src/messages/message.js");
+/* harmony import */ var _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @messServ/messages/response-message.js */ "./src/messages/response-message.js");
+/* harmony import */ var _messServ_core_stored_request_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @messServ/core/stored-request.js */ "./src/core/stored-request.js");
 /**
  * @module MessagingService
  */
+
 
 
 
@@ -414,7 +416,12 @@ class MessagingService {
    * @param {ResponseMessage} message - An incoming response message.
    */
   dispatchMessage (message) {
-    if (!_messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_0__["default"].isResponse(message)) {
+    console.info('Dispatch message is called')
+    if (!_messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__["default"].isKnownType(message.type)) {
+      // Ignore messages that we do not support
+      return
+    }
+    if (!_messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_1__["default"].isResponse(message)) {
       console.error('A message not following a response format will be ignored:', message)
       return
     }
@@ -430,7 +437,7 @@ class MessagingService {
     window.clearTimeout(requestInfo.timeoutID) // Clear a timeout
     const responseCode = message.responseCode
 
-    if (responseCode === _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_0__["default"].responseCodes.ERROR) {
+    if (responseCode === _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_1__["default"].responseCodes.ERROR) {
       // There was an error returned. An error info is in the message body.
       requestInfo.reject(message.body)
     } else {
@@ -450,7 +457,7 @@ class MessagingService {
    */
   registerRequest (request, timeout = 10000) {
     if (this._messages.has(request.ID)) throw new Error(`Request with ${request.ID} ID is already registered`)
-    let storedRequest = new _messServ_core_stored_request_js__WEBPACK_IMPORTED_MODULE_1__["default"](request) // eslint-disable-line prefer-const
+    let storedRequest = new _messServ_core_stored_request_js__WEBPACK_IMPORTED_MODULE_2__["default"](request) // eslint-disable-line prefer-const
     this._messages.set(request.ID, storedRequest)
     storedRequest.timeoutID = window.setTimeout((requestID) => {
       storedRequest.reject(new Error(`Timeout has been expired for a message with request ID ${request.ID}`))
@@ -721,8 +728,11 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
    * @private
    */
   _responseHandler (event) {
-    if (event.origin !== this._targetURL) {
-      // Message came from a destination we're not listening for
+    console.info('Response handler')
+    if (!event.data || !event.data.type) {
+      /*
+      Event does not have a data prop that contains a message object. We cannot handle such events and will ignore theml
+      */
       return
     }
 
@@ -788,6 +798,10 @@ class Message {
      */
     this.body = body
   }
+
+  static isKnownType (typeValue) {
+    return Object.values(Message.types).includes(typeValue)
+  }
 }
 
 /**
@@ -800,9 +814,12 @@ Message.roles = {
 
 /**
  * Specifies a message type: what kind of message it is and what purpose it serves.
+ * Message types are used to distinguish different types of messages from each other
+ * and to distinguish Alpheios from non-Alpheios messages. All Alpheios messages
+ * must start from an `ALPHEIOS_` prefix.
  */
 Message.types = {
-  GENERIC: 'Generic'
+  GENERIC: 'ALPHEIOS_MESSAGE' // A generic message of general purpose
 }
 
 

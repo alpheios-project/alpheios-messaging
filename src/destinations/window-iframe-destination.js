@@ -97,8 +97,11 @@ export default class WindowIframeDestination extends Destination {
    * @private
    */
   _responseHandler (event) {
-    if (event.origin !== this._targetURL) {
-      // Message came from a destination we're not listening for
+    console.info('Response handler')
+    if (!event.data || !event.data.type) {
+      /*
+      Event does not have a data prop that contains a message object. We cannot handle such events and will ignore theml
+      */
       return
     }
 
