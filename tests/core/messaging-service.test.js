@@ -4,8 +4,16 @@ import MessagingService from '@messServ/core/messaging-service.js'
 
 describe('MessagingService class', () => {
   const serviceName = 'ServiceName'
-  const destOne = new Destination({ name: 'Destination one' })
-  const destTwo = new Destination({ name: 'Destination two' })
+  const registerResponseCallbackMock = jest.fn()
+  const deregisterMock = jest.fn()
+  Destination.prototype.registerResponseCallback = registerResponseCallbackMock
+  Destination.prototype.deregister = deregisterMock
+  const destOneSend = new Destination({ name: 'Destination one', commModes: [Destination.commModes.SEND] })
+  const destTwoReceive = new Destination({ name: 'Destination two', commModes: [Destination.commModes.RECEIVE] })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
 
   it('MessagingService constructor: messages map', () => {
     const messagingService = new MessagingService(serviceName)
@@ -20,15 +28,15 @@ describe('MessagingService class', () => {
   })
 
   it('MessagingService constructor: with a single destination', () => {
-    const messagingService = new MessagingService(serviceName, destOne)
+    const messagingService = new MessagingService(serviceName, destOneSend)
     expect(Array.from(messagingService._destinations.keys())).toMatchObject(['Destination one'])
-    expect(Array.from(messagingService._destinations.values())).toMatchObject([destOne])
+    expect(Array.from(messagingService._destinations.values())).toMatchObject([destOneSend])
   })
 
   it('MessagingService constructor: with multiple destinations', () => {
-    const messagingService = new MessagingService(serviceName, [destOne, destTwo])
+    const messagingService = new MessagingService(serviceName, [destOneSend, destTwoReceive])
     expect(Array.from(messagingService._destinations.keys())).toMatchObject(['Destination one', 'Destination two'])
-    expect(Array.from(messagingService._destinations.values())).toMatchObject([destOne, destTwo])
+    expect(Array.from(messagingService._destinations.values())).toMatchObject([destOneSend, destTwoReceive])
   })
 
   it('MessagingService constructor: throws an error when no name is provided', () => {
@@ -70,16 +78,28 @@ describe('MessagingService class', () => {
   it('registerDestination: add a new one', () => {
     const messagingService = new MessagingService(serviceName)
     expect(messagingService._destinations.size).toBe(0)
-    messagingService.registerDestination(destOne)
+    messagingService.registerDestination(destOneSend)
     expect(Array.from(messagingService._destinations.keys())).toMatchObject(['Destination one'])
-    expect(Array.from(messagingService._destinations.values())).toMatchObject([destOne])
+    expect(Array.from(messagingService._destinations.values())).toMatchObject([destOneSend])
+  })
+
+  it('registerDestination: must call registerResponseCallback on a destination in a send mode', () => {
+    const messagingService = new MessagingService(serviceName)
+    messagingService.registerDestination(destOneSend)
+    expect(registerResponseCallbackMock.mock.calls.length).toBe(1)
+  })
+
+  it('registerDestination: must not call registerResponseCallback on a destination in a receive mode', () => {
+    const messagingService = new MessagingService(serviceName)
+    messagingService.registerDestination(destTwoReceive)
+    expect(registerResponseCallbackMock.mock.calls.length).toBe(0)
   })
 
   it('registerDestination: add an existing one', () => {
     const messagingService = new MessagingService(serviceName)
     expect(messagingService._destinations.size).toBe(0)
-    messagingService.registerDestination(destOne)
-    expect(() => messagingService.registerDestination(destOne)).toThrowError('Destination already exists')
+    messagingService.registerDestination(destOneSend)
+    expect(() => messagingService.registerDestination(destOneSend)).toThrowError('Destination already exists')
   })
 
   it('updateDestination: destination exists', () => {
@@ -105,5 +125,13 @@ describe('MessagingService class', () => {
     const destOneUpdated = new Destination({ name: 'A new destination name' })
     messagingService.registerDestination(destOne)
     expect(() => messagingService.updateDestination(destOneUpdated)).toThrowError('Cannot update a destination that does not exist')
+  })
+
+  it('updateDestination: must call deregister on existing destination', () => {
+    const messagingService = new MessagingService(serviceName)
+    messagingService.registerDestination(destOneSend)
+    expect(deregisterMock.mock.calls.length).toBe(0)
+    messagingService.updateDestination(destOneSend)
+    expect(deregisterMock.mock.calls.length).toBe(1)
   })
 })

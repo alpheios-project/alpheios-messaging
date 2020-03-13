@@ -10,8 +10,11 @@ export default class Destination {
    *
    * @param {object} [configuration={}] - A configuration object for a destination.
    * @param {string} configuration.name - A name of a particular destination.
+   * @param {string[]} configuration.commModes - A list of communication modes that should be enabled for
+   *        a destination. A list of available modes is defined in Destination.commModes.
+   *        Defaults to a SEND mode.
    */
-  constructor ({ name } = {}) {
+  constructor ({ name, commModes = [Destination.commModes.SEND] } = {}) {
     if (!name) {
       throw new Error('Destination name is missing')
     }
@@ -25,6 +28,14 @@ export default class Destination {
     this.name = name
 
     /**
+     * An array of communication modes that are enabled for a destination.
+     *
+     * @type {string[]}
+     * @public
+     */
+    this.commModes = commModes
+
+    /**
      * A function that will be called when a response from destination is received.
      *
      * @type {Function}
@@ -34,11 +45,43 @@ export default class Destination {
   }
 
   /**
-   * Registers a function to call when a response from destination is received.
+   * Checks if a SEND communication mode is enabled for this destination.
    *
-   * @param {Function} callbackFn - A function to be called when response is received.
+   * @returns {boolean} True if destination is in the SEND mode.
    */
-  registerResponseCallback (callbackFn) {
-    this._responseCallback = callbackFn
+  get ableToSend () {
+    return this.commModes.includes(Destination.commModes.SEND)
   }
+
+  /**
+   * Checks if a RECEIVE communication mode is enabled for this destination.
+   *
+   * @returns {boolean} True if destination is in the RECEIVE mode.
+   */
+  get ableToReceive () {
+    return this.commModes.includes(Destination.commModes.RECEIVE)
+  }
+
+  /**
+   * This function will be called by the messaging service when a destination is deregistered or deleted.
+   * It must do a cleanup necessary for a destination object. Its functionality should be defined within a subclass.
+   */
+  deregister () {
+    throw new Error('Deregister method must be defined in a subclass')
+  }
+}
+
+/*
+A list of communication modes that a destination can support.
+ */
+Destination.commModes = {
+  /*
+  If a SEND mode is enabled, this destination can send messages to other destinations of the same type.
+   */
+  SEND: 'Send',
+
+  /*
+  A RECEIVE mode enables destination to receive messages from other destinations of the same type.
+   */
+  RECEIVE: 'Receive'
 }

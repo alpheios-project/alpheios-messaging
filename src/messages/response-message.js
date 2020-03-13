@@ -10,8 +10,10 @@ export default class ResponseMessage extends Message {
    * @param {RequestMessage} request - A request that initiated this response. Used to copy routing information mostly.
    * @param {object} [body={}] - A body of the response, a plain JS object with no methods.
    * @param {string} responseCode - A code to indicate results of the request handling: Success, Failure, etc.
+   * @param {object} options - Additional non-obligatory parameters:
+   * @param {number} options.errorCode - An error code indicating why request has failed.
    */
-  constructor (request, body = {}, responseCode = ResponseMessage.responseCodes.UNDEFINED) {
+  constructor (request, body = {}, responseCode = ResponseMessage.responseCodes.UNDEFINED, { errorCode } = {}) {
     super(body)
     if (!request) throw new Error('Request is not provided')
     if (!request.ID) throw new Error('Request has no ID')
@@ -19,6 +21,21 @@ export default class ResponseMessage extends Message {
     this.requestHeader = request.header || {}
     this.requestID = request.ID // ID of the request to match request and response
     this.responseCode = responseCode
+
+    /**
+     * If request failed this prop will contain an error code indicating the reason of the failure.
+     *
+     * @type {number}
+     */
+    this.errorCode = 0
+
+    if (responseCode === ResponseMessage.responseCodes.ERROR) {
+      // Request has failed. An error code must be provided.
+      if (!errorCode) {
+        throw new Error('An error code must be provided for failed requests')
+      }
+      this.errorCode = errorCode
+    }
   }
 
   /**
@@ -38,11 +55,12 @@ export default class ResponseMessage extends Message {
    *
    * @param {RequestMessage} request - An original request.
    * @param {Error} error - An error object containing error information.
+   * @param {number} errorCode - An error code indicating why a request failed.
    * @returns {ResponseMessage} - A newly created response message with the SUCCESS return code.
    * @class
    */
-  static Error (request, error) {
-    return new this(request, error, ResponseMessage.responseCodes.ERROR)
+  static Error (request, error, errorCode) {
+    return new this(request, error, ResponseMessage.responseCodes.ERROR, { errorCode })
   }
 
   /**
@@ -67,9 +85,23 @@ ResponseMessage.responseCodes = {
   // In this case a message body may contain a response data object or be empty.
   SUCCESS: 'Success',
 
-  // There is no information about what was the outcome of request.
+  // There is no information about what was the outcome of a request.
   UNDEFINED: 'Undefined',
 
-  // Request failed. A message body will have information about an error.
+  // Request failed. A message will contain information about an error.
   ERROR: 'Error'
+}
+
+/**
+ * If request failed, the error code will be used to indicate the reason of a failure.
+ */
+ResponseMessage.errorCodes = {
+  // A remote service has not been initialized yet
+  SERVICE_UNINITIALIZED: 1,
+  // An error occurred during initialization of a remote service
+  INITIALIZATION_ERROR: 2,
+  // Request of unknown type is received by a remote service
+  UNKNOWN_REQUEST: 3,
+  // An unspecified error has occurred inside a remote service
+  INTERNAL_ERROR: 4
 }

@@ -2,8 +2,9 @@
 import Destination from '@messServ/destinations/destination.js'
 
 describe('Destination class', () => {
+  const destinationName = 'Destination name'
+
   it('Constructor: shall create a Destination object', () => {
-    const destinationName = 'Destination name'
     const destination = new Destination({ name: destinationName })
     expect(destination).toMatchObject({
       name: destinationName,
@@ -15,11 +16,42 @@ describe('Destination class', () => {
     expect(() => new Destination()).toThrowError('Destination name is missing')
   })
 
-  it('registerResponseCallback: assign a callback function', () => {
-    const callbackFn = jest.fn()
-    const destinationName = 'Destination name'
+  it('Constructor: SEND mode should be enabled by default', () => {
     const destination = new Destination({ name: destinationName })
-    destination.registerResponseCallback(callbackFn)
-    expect(destination._responseCallback).toBe(callbackFn)
+    expect(destination.commModes).toEqual([Destination.commModes.SEND])
+  })
+
+  it('ableToSend: must return true for a destination in a SEND mode', () => {
+    const destination = new Destination({ name: destinationName, commModes: [Destination.commModes.SEND] })
+    expect(destination.ableToSend).toBeTruthy()
+  })
+
+  it('ableToSend: must return false for a destination in a RECEIVE mode', () => {
+    const destination = new Destination({ name: destinationName, commModes: [Destination.commModes.RECEIVE] })
+    expect(destination.ableToSend).toBeFalsy()
+  })
+
+  it('ableToReceive: must return false for a destination in a SEND mode', () => {
+    const destination = new Destination({ name: destinationName, commModes: [Destination.commModes.SEND] })
+    expect(destination.ableToReceive).toBeFalsy()
+  })
+
+  it('ableToReceive: must return true for a destination in a RECEIVE mode', () => {
+    const destination = new Destination({ name: destinationName, commModes: [Destination.commModes.RECEIVE] })
+    expect(destination.ableToReceive).toBeTruthy()
+  })
+
+  it('Constructor: destination can have multiple communication modes', () => {
+    const destination = new Destination({
+      name: destinationName,
+      commModes: [Destination.commModes.SEND, Destination.commModes.RECEIVE]
+    })
+    expect(destination.ableToSend).toBeTruthy()
+    expect(destination.ableToReceive).toBeTruthy()
+  })
+
+  it('deregister: must throw an error when called on a parent', () => {
+    const destination = new Destination({ name: destinationName })
+    expect(() => destination.deregister()).toThrowError()
   })
 })

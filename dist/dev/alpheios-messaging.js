@@ -100,7 +100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /*!******************!*\
   !*** ./index.js ***!
   \******************/
-/*! exports provided: MessagingService, WindowIframeDestination, RequestMessage, ResponseMessage, CedictDestinationConfig */
+/*! exports provided: MessagingService, WindowIframeDestination, RequestMessage, ResponseMessage, CedictDestinationConfig, CedictDestinationDevConfig */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -119,6 +119,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @messServ/configurations/destinations.js */ "./src/configurations/destinations.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CedictDestinationConfig", function() { return _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__["CedictDestinationConfig"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CedictDestinationDevConfig", function() { return _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__["CedictDestinationDevConfig"]; });
 
 
 
@@ -257,12 +259,13 @@ module.exports = v4;
 /*!********************************************!*\
   !*** ./src/configurations/destinations.js ***!
   \********************************************/
-/*! exports provided: CedictDestinationConfig */
+/*! exports provided: CedictDestinationConfig, CedictDestinationDevConfig */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CedictDestinationConfig", function() { return CedictDestinationConfig; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CedictDestinationDevConfig", function() { return CedictDestinationDevConfig; });
 /**
  * This is a configuration of a WindowsIframeDestination that can be used to connect to CEDICT client service.
  *
@@ -273,7 +276,16 @@ const CedictDestinationConfig = {
   targetURL: 'https://lexis-dev.alpheios.net',
   targetIframeID: 'alpheios-lexis-cs'
 }
-
+/**
+ * This is a development version of the above configuration
+ *
+ * @type {{targetIframeID: string, name: string, targetURL: string}}
+ */
+const CedictDestinationDevConfig = {
+  name: 'cedict',
+  targetURL: 'https://lexis-dev.alpheios.net/index-dev.html',
+  targetIframeID: 'alpheios-lexis-cs'
+}
 
 /***/ }),
 
@@ -394,7 +406,7 @@ class MessagingService {
       throw new Error('Destination already exists')
     }
     this._destinations.set(destination.name, destination)
-    destination.registerResponseCallback(this.dispatchMessage.bind(this))
+    if (destination.ableToSend) { destination.registerResponseCallback(this.dispatchMessage.bind(this)) }
   }
 
   /**
@@ -406,8 +418,11 @@ class MessagingService {
     if (!this._destinations.has(destination.name)) {
       throw new Error('Cannot update a destination that does not exist')
     }
+    // Call `deregister` on the destination in order to let it clean the things up
+    this._destinations.get(destination.name).deregister()
     this._destinations.set(destination.name, destination)
-    destination.registerResponseCallback(this.dispatchMessage.bind(this))
+    // Register a response callback only if destination supports a SEND mode
+    if (destination.ableToSend) { destination.registerResponseCallback(this.dispatchMessage.bind(this)) }
   }
 
   /**
@@ -416,7 +431,6 @@ class MessagingService {
    * @param {ResponseMessage} message - An incoming response message.
    */
   dispatchMessage (message) {
-    console.info('Dispatch message is called')
     if (!_messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__["default"].isKnownType(message.type)) {
       // Ignore messages that we do not support
       return
@@ -438,8 +452,8 @@ class MessagingService {
     const responseCode = message.responseCode
 
     if (responseCode === _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_1__["default"].responseCodes.ERROR) {
-      // There was an error returned. An error info is in the message body.
-      requestInfo.reject(message.body)
+      // The message returned an error. The message body may contain additional information about an error.
+      requestInfo.reject(message)
     } else {
       // Request was processed without errors
       requestInfo.resolve(message)
@@ -505,7 +519,11 @@ class MessagingService {
       throw new Error(`Unknown destination ${destName}`)
     }
 
-    this._destinations.get(destName).registerReceiverCallback(callbackFn)
+    let destination = this._destinations.get(destName) // eslint-disable-line prefer-const
+    if (!destination.ableToReceive) {
+      throw new Error('Destination is not configured to receive messages')
+    }
+    destination.registerReceiverCallback(callbackFn)
   }
 }
 
@@ -582,8 +600,11 @@ class Destination {
    *
    * @param {object} [configuration={}] - A configuration object for a destination.
    * @param {string} configuration.name - A name of a particular destination.
+   * @param {string[]} configuration.commModes - A list of communication modes that should be enabled for
+   *        a destination. A list of available modes is defined in Destination.commModes.
+   *        Defaults to a SEND mode.
    */
-  constructor ({ name } = {}) {
+  constructor ({ name, commModes = [Destination.commModes.SEND] } = {}) {
     if (!name) {
       throw new Error('Destination name is missing')
     }
@@ -597,6 +618,14 @@ class Destination {
     this.name = name
 
     /**
+     * An array of communication modes that are enabled for a destination.
+     *
+     * @type {string[]}
+     * @public
+     */
+    this.commModes = commModes
+
+    /**
      * A function that will be called when a response from destination is received.
      *
      * @type {Function}
@@ -606,13 +635,45 @@ class Destination {
   }
 
   /**
-   * Registers a function to call when a response from destination is received.
+   * Checks if a SEND communication mode is enabled for this destination.
    *
-   * @param {Function} callbackFn - A function to be called when response is received.
+   * @returns {boolean} True if destination is in the SEND mode.
    */
-  registerResponseCallback (callbackFn) {
-    this._responseCallback = callbackFn
+  get ableToSend () {
+    return this.commModes.includes(Destination.commModes.SEND)
   }
+
+  /**
+   * Checks if a RECEIVE communication mode is enabled for this destination.
+   *
+   * @returns {boolean} True if destination is in the RECEIVE mode.
+   */
+  get ableToReceive () {
+    return this.commModes.includes(Destination.commModes.RECEIVE)
+  }
+
+  /**
+   * This function will be called by the messaging service when a destination is deregistered or deleted.
+   * It must do a cleanup necessary for a destination object. Its functionality should be defined within a subclass.
+   */
+  deregister () {
+    throw new Error('Deregister method must be defined in a subclass')
+  }
+}
+
+/*
+A list of communication modes that a destination can support.
+ */
+Destination.commModes = {
+  /*
+  If a SEND mode is enabled, this destination can send messages to other destinations of the same type.
+   */
+  SEND: 'Send',
+
+  /*
+  A RECEIVE mode enables destination to receive messages from other destinations of the same type.
+   */
+  RECEIVE: 'Receive'
 }
 
 
@@ -641,9 +702,14 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
    * @param {string} configuration.name - A name of a destination (for addressing a destination in a messaging service).
    * @param {string} configuration.targetURL - A URL of a document within an iframe where messages will be sent.
    * @param {string} configuration.targetIframeID - An ID of an iframe element (without `#`).
+   * @param {string[]} configuration.commModes - A list of communication modes that should be enabled for
+   *        a destination. A list of available modes is defined in Destination.commModes.
+   * @param {Function} configuration.receiverCB - A function that will be called when destination is in the
+   *        RECEIVE mode and the incoming request has arrived. This function will receive two parameters:
+   *        the message object and the function that will need to be called in order to send a response back.
    */
-  constructor ({ name, targetURL, targetIframeID } = {}) {
-    super({ name })
+  constructor ({ name, targetURL, targetIframeID, commModes, receiverCB } = {}) {
+    super({ name, commModes })
 
     if (!targetURL) {
       throw new Error('Target URL is not provided')
@@ -669,18 +735,29 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
      */
     this._targetIframeID = targetIframeID
 
-    window.addEventListener('message', this._responseHandler.bind(this), false)
+    if (this.ableToReceive) {
+      // Destination is initialized in the receive mode
+      if (!receiverCB) {
+        throw new Error('A receiver callback must be provided for a destination in the RECEIVE communication mode')
+      }
+      this._registeredRequestHandler = this._requestHandler.bind(this, receiverCB)
+      window.addEventListener('message', this._registeredRequestHandler, false)
+    }
+
+    // The following two props will keep track of request and response handlers registered for this destination.
+    this._registeredRequestHandler = null
+    this._registeredResponseHandler = null
   }
 
   /**
-   * Registers a function to be called an a receiving side when a message from origin to destination will arrive.
-   * This callback will receive the following arguments: the request object (of `RequestMessage` type)
-   * and the function that can be used to send a response.
+   * Registers a function to call when a response from destination is received.
    *
-   * @param {Function} callbackFn - A function that will be called when a request will arrive to its destination.
+   * @param {Function} callbackFn - A function to be called when response is received.
    */
-  registerReceiverCallback (callbackFn) {
-    window.addEventListener('message', this._requestHandler.bind(this, callbackFn), false)
+  registerResponseCallback (callbackFn) {
+    this._registeredResponseHandler = this._responseHandler.bind(this)
+    window.addEventListener('message', this._registeredResponseHandler, false)
+    this._responseCallback = callbackFn
   }
 
   /**
@@ -728,7 +805,6 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
    * @private
    */
   _responseHandler (event) {
-    console.info('Response handler')
     if (!event.data || !event.data.type) {
       /*
       Event does not have a data prop that contains a message object. We cannot handle such events and will ignore theml
@@ -740,6 +816,22 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
     const responseMessage = event.data
     if (this._responseCallback) {
       this._responseCallback(responseMessage)
+    }
+  }
+
+  /**
+   * This function will be called by the messaging service when destination is deregistered or deleted.
+   * It must do a cleanup for a destination object.
+   */
+  deregister () {
+    // Remove event listeners for registered request and response handlers
+    if (this._registeredResponseHandler) {
+      window.removeEventListener('message', this._registeredResponseHandler, false)
+      this._registeredResponseHandler = null
+    }
+    if (!this._registeredRequestHandler) {
+      window.removeEventListener('message', this._registeredRequestHandler, false)
+      this._registeredRequestHandler = null
     }
   }
 }
@@ -886,8 +978,10 @@ class ResponseMessage extends _messServ_messages_message_js__WEBPACK_IMPORTED_MO
    * @param {RequestMessage} request - A request that initiated this response. Used to copy routing information mostly.
    * @param {object} [body={}] - A body of the response, a plain JS object with no methods.
    * @param {string} responseCode - A code to indicate results of the request handling: Success, Failure, etc.
+   * @param {object} options - Additional non-obligatory parameters:
+   * @param {number} options.errorCode - An error code indicating why request has failed.
    */
-  constructor (request, body = {}, responseCode = ResponseMessage.responseCodes.UNDEFINED) {
+  constructor (request, body = {}, responseCode = ResponseMessage.responseCodes.UNDEFINED, { errorCode } = {}) {
     super(body)
     if (!request) throw new Error('Request is not provided')
     if (!request.ID) throw new Error('Request has no ID')
@@ -895,6 +989,21 @@ class ResponseMessage extends _messServ_messages_message_js__WEBPACK_IMPORTED_MO
     this.requestHeader = request.header || {}
     this.requestID = request.ID // ID of the request to match request and response
     this.responseCode = responseCode
+
+    /**
+     * If request failed this prop will contain an error code indicating the reason of the failure.
+     *
+     * @type {number}
+     */
+    this.errorCode = 0
+
+    if (responseCode === ResponseMessage.responseCodes.ERROR) {
+      // Request has failed. An error code must be provided.
+      if (!errorCode) {
+        throw new Error('An error code must be provided for failed requests')
+      }
+      this.errorCode = errorCode
+    }
   }
 
   /**
@@ -914,11 +1023,12 @@ class ResponseMessage extends _messServ_messages_message_js__WEBPACK_IMPORTED_MO
    *
    * @param {RequestMessage} request - An original request.
    * @param {Error} error - An error object containing error information.
+   * @param {number} errorCode - An error code indicating why a request failed.
    * @returns {ResponseMessage} - A newly created response message with the SUCCESS return code.
    * @class
    */
-  static Error (request, error) {
-    return new this(request, error, ResponseMessage.responseCodes.ERROR)
+  static Error (request, error, errorCode) {
+    return new this(request, error, ResponseMessage.responseCodes.ERROR, { errorCode })
   }
 
   /**
@@ -943,11 +1053,25 @@ ResponseMessage.responseCodes = {
   // In this case a message body may contain a response data object or be empty.
   SUCCESS: 'Success',
 
-  // There is no information about what was the outcome of request.
+  // There is no information about what was the outcome of a request.
   UNDEFINED: 'Undefined',
 
-  // Request failed. A message body will have information about an error.
+  // Request failed. A message will contain information about an error.
   ERROR: 'Error'
+}
+
+/**
+ * If request failed, the error code will be used to indicate the reason of a failure.
+ */
+ResponseMessage.errorCodes = {
+  // A remote service has not been initialized yet
+  SERVICE_UNINITIALIZED: 1,
+  // An error occurred during initialization of a remote service
+  INITIALIZATION_ERROR: 2,
+  // Request of unknown type is received by a remote service
+  UNKNOWN_REQUEST: 3,
+  // An unspecified error has occurred inside a remote service
+  INTERNAL_ERROR: 4
 }
 
 

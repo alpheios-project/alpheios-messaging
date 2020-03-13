@@ -102,7 +102,7 @@ export default class MessagingService {
       throw new Error('Destination already exists')
     }
     this._destinations.set(destination.name, destination)
-    destination.registerResponseCallback(this.dispatchMessage.bind(this))
+    if (destination.ableToSend) { destination.registerResponseCallback(this.dispatchMessage.bind(this)) }
   }
 
   /**
@@ -114,8 +114,11 @@ export default class MessagingService {
     if (!this._destinations.has(destination.name)) {
       throw new Error('Cannot update a destination that does not exist')
     }
+    // Call `deregister` on the destination in order to let it clean the things up
+    this._destinations.get(destination.name).deregister()
     this._destinations.set(destination.name, destination)
-    destination.registerResponseCallback(this.dispatchMessage.bind(this))
+    // Register a response callback only if destination supports a SEND mode
+    if (destination.ableToSend) { destination.registerResponseCallback(this.dispatchMessage.bind(this)) }
   }
 
   /**
@@ -124,7 +127,6 @@ export default class MessagingService {
    * @param {ResponseMessage} message - An incoming response message.
    */
   dispatchMessage (message) {
-    console.info('Dispatch message is called')
     if (!Message.isKnownType(message.type)) {
       // Ignore messages that we do not support
       return
@@ -146,8 +148,8 @@ export default class MessagingService {
     const responseCode = message.responseCode
 
     if (responseCode === ResponseMessage.responseCodes.ERROR) {
-      // There was an error returned. An error info is in the message body.
-      requestInfo.reject(message.body)
+      // The message returned an error. The message body may contain additional information about an error.
+      requestInfo.reject(message)
     } else {
       // Request was processed without errors
       requestInfo.resolve(message)
@@ -213,7 +215,11 @@ export default class MessagingService {
       throw new Error(`Unknown destination ${destName}`)
     }
 
-    this._destinations.get(destName).registerReceiverCallback(callbackFn)
+    let destination = this._destinations.get(destName) // eslint-disable-line prefer-const
+    if (!destination.ableToReceive) {
+      throw new Error('Destination is not configured to receive messages')
+    }
+    destination.registerReceiverCallback(callbackFn)
   }
 }
 

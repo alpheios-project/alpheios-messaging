@@ -160,59 +160,77 @@ describe('ResponseMessage class', () => {
     expect(ResponseMessage.Error.bind(ResponseMessage, requestMessage, {})).toThrowError('Request has no ID')
   })
 
-  it('Error: body (no arguments)', () => {
-    const msg = ResponseMessage.Error(requestMessage)
-    expect(msg.body).toMatchObject({})
+  it('Error: must be created with the error object and an errorCode', () => {
+    const error = new Error('Error message')
+    const errorCode = 101
+    const msg = ResponseMessage.Error(requestMessage, error, errorCode)
+    expect(msg.body).toBe(error)
+    expect(msg.errorCode).toBe(errorCode)
   })
 
-  it('Error: body is set', () => {
-    const body = { prop1: 'one', prop2: 'two' }
-    const msg = ResponseMessage.Error(requestMessage, body)
-    expect(msg.body).toMatchObject(body)
+  it('Error: an error code must be provided', () => {
+    const error = new Error('Error message')
+    expect(() => ResponseMessage.Error(requestMessage, error)).toThrowError('An error code must be provided for failed requests')
   })
 
   it('Error: role is RESPONSE', () => {
-    const msg = ResponseMessage.Error(requestMessage)
+    const error = new Error('Error message')
+    const errorCode = 101
+    const msg = ResponseMessage.Error(requestMessage, error, errorCode)
     expect(msg.role).toBe(ResponseMessage.roles.RESPONSE)
   })
 
   it('Error: request header is empty if not provided by the request object', () => {
-    const msg = ResponseMessage.Error(requestMessage)
+    const error = new Error('Error message')
+    const errorCode = 101
+    const msg = ResponseMessage.Error(requestMessage, error, errorCode)
     expect(msg.requestHeader).toMatchObject({})
   })
 
   it('Error: request header must match the header in the request object', () => {
+    const error = new Error('Error message')
+    const errorCode = 101
     let requestMessage = new RequestMessage() // eslint-disable-line prefer-const
     const header = { prop1: 'one' }
     requestMessage.header = header
-    const msg = ResponseMessage.Error(requestMessage)
+    const msg = ResponseMessage.Error(requestMessage, error, errorCode)
     expect(msg.requestHeader).toBe(header)
   })
 
   it('Error: requestID must match the ID of the request object', () => {
+    const error = new Error('Error message')
+    const errorCode = 101
     const requestMessage = new RequestMessage()
-    const msg = ResponseMessage.Error(requestMessage)
+    const msg = ResponseMessage.Error(requestMessage, error, errorCode)
     expect(msg.requestID).toBe(requestMessage.ID)
   })
 
   it('Error: type is GENERIC', () => {
-    const msg = ResponseMessage.Error(requestMessage)
+    const error = new Error('Error message')
+    const errorCode = 101
+    const msg = ResponseMessage.Error(requestMessage, error, errorCode)
     expect(msg.type).toBe(ResponseMessage.types.GENERIC)
   })
 
   it('Error: ID matches UUID v4 pattern', () => {
-    const msg = ResponseMessage.Error(requestMessage)
+    const error = new Error('Error message')
+    const errorCode = 101
+    const msg = ResponseMessage.Error(requestMessage, error, errorCode)
     expect(msg.ID).toMatch(/(?:[a-z|\d]){8}-(?:[a-z|\d]){4}-(?:[a-z|\d]){4}-(?:[a-z|\d]){4}-(?:[a-z|\d]){12}/)
   })
 
   it('Error: ID is random', () => {
-    const msgOne = ResponseMessage.Error(requestMessage)
-    const msgTwo = ResponseMessage.Error(requestMessage)
+    const error = new Error('Error message')
+    const errorCode = 101
+    const msgOne = ResponseMessage.Error(requestMessage, error, errorCode)
+    const msgTwo = ResponseMessage.Error(requestMessage, error, errorCode)
     expect(msgOne.ID).not.toBe(msgTwo.ID)
   })
 
   it('Error: responseCode is ERROR', () => {
-    const msg = ResponseMessage.Error(requestMessage)
+    const error = new Error('Error message')
+    const errorCode = 101
+    const msg = ResponseMessage.Error(requestMessage, error, errorCode)
     expect(msg.responseCode).toBe(ResponseMessage.responseCodes.ERROR)
   })
 
