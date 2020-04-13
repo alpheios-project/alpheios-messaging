@@ -194,9 +194,13 @@ export default class MessagingService {
       throw new Error(`Unknown destination ${destName}`)
     }
 
-    const promise = this.registerRequest(request, timeout)
-    this._destinations.get(destName).sendRequest(request)
-    return promise
+    try {
+      this._destinations.get(destName).sendRequest(request)
+    } catch (err) {
+      throw new Error(`Request to ${destName} failed: ${err.message}`)
+    }
+    // Do not register request before we're sure that the message is sent successfully.
+    return this.registerRequest(request, timeout)
   }
 }
 

@@ -79,6 +79,26 @@ export default class WindowIframeDestination extends Destination {
       throw new Error(`An #${this._targetIframeID} iframe does not exist in the document`)
     }
     const iframeWindow = iframe.contentWindow
+
+    /*
+    If we'll try to send a message to an iframe which content would not been loaded yet,
+    `postMessage` will throw an error. It will be impossible, however, to catch this error here because `postMessage`
+    executes asynchronously (please see https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
+    Once the cross-origin iframe content became available, it will throw a DOM security exception
+    if we try to access its `location` prop. We can use that to check whether an iframe content is loaded
+    before trying to send a message to it.
+     */
+    let contentNotLoaded = false
+    try {
+      contentNotLoaded = iframeWindow.location.href === 'about:blank'
+    } catch (err) {
+      // Do nothing. This error probably means that a cross-origin iframe content is available now.
+    }
+
+    if (contentNotLoaded) {
+      // If we can access a target iframe location and its URL is blank it means an iframe content is not loaded yet.
+      throw new Error(`Target document ${this._targetURL} is not loaded yet`)
+    }
     iframeWindow.postMessage(requestMessage, this._targetURL)
   }
 

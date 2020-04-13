@@ -1,7 +1,7 @@
 /**
  * @module Message
  */
-import uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 
 /** A base class for all types of messages */
 export default class Message {
