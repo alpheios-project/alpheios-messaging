@@ -92,7 +92,12 @@ export default class WindowIframeDestination extends Destination {
     try {
       contentNotLoaded = iframeWindow.location.href === 'about:blank'
     } catch (err) {
-      // Do nothing. This error probably means that a cross-origin iframe content is available now.
+      if (err instanceof DOMException) {
+        // Do nothing. This error usually means that a cross-origin iframe content has become available.
+      } else {
+        // Re-throw an error
+        throw err
+      }
     }
 
     if (contentNotLoaded) {

@@ -1,6 +1,6 @@
 {
   "name": "alpheios-messaging",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A messaging service for Alpheios Tools",
   "main": "dist/prod/alpheios-messaging.min.js",
   "scripts": {
