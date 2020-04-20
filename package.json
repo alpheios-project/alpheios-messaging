@@ -5,7 +5,8 @@
   "main": "dist/prod/alpheios-messaging.min.js",
   "scripts": {
     "test": "jest --coverage",
-    "build": "npm run build-dev && npm run build-prod",
+    "build": "npm run build-node && npm run build-dev && npm run build-prod",
+    "build-node": "node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs -m webpack -M development -p lib -c config-node.mjs",
     "build-prod": "npm run lint && node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs -m webpack -M production -p lib -c config.mjs",
     "build-dev": "node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs -m webpack -M development -p lib -c config.mjs",
     "lint": "eslint --fix ./src/**/*.js",
