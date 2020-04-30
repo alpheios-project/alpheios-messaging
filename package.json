@@ -9,8 +9,11 @@
     "build-node": "node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs -m webpack -M development -p lib -c config-node.mjs",
     "build-prod": "npm run lint && node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs -m webpack -M production -p lib -c config.mjs",
     "build-dev": "node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs -m webpack -M development -p lib -c config.mjs",
+    "build-test": "node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs -m webpack -M development -p lib -c config-test.mjs",
     "lint": "eslint --fix ./src/**/*.js",
-    "lint-nofix": "eslint ./src/**/*.js"
+    "lint-nofix": "eslint ./src/**/*.js",
+    "start-dev-server": "npx http-server ./tests/browser --port 8100 -c-1",
+    "test-e2e": "npx wdio wdio.conf.js"
   },
   "repository": {
     "type": "git",
@@ -45,10 +48,14 @@
     ]
   },
   "eslintConfig": {
+    "plugins": [
+      "wdio"
+    ],
     "extends": [
       "standard",
       "plugin:jsdoc/recommended",
-      "plugin:vue/essential"
+      "plugin:vue/essential",
+      "plugin:wdio/recommended"
     ],
     "env": {
       "browser": true,
@@ -74,11 +81,19 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "@babel/register": "^7.9.0",
     "@babel/runtime": "^7.9.2",
+    "@wdio/cli": "^6.1.5",
+    "@wdio/jasmine-framework": "^6.1.6",
+    "@wdio/local-runner": "^6.1.6",
+    "@wdio/mocha-framework": "^6.1.6",
+    "@wdio/spec-reporter": "^6.1.5",
+    "@wdio/sync": "^6.1.5",
     "alpheios-node-build": "github:alpheios-project/node-build#semver:^3.0.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.3.0",
     "bytes": "^3.1.0",
+    "chromedriver": "^81.0.0",
     "command-line-args": "^5.1.1",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
@@ -88,7 +103,9 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-wdio": "^6.0.12",
     "eslint-scope": "^5.0.0",
+    "expect-webdriverio": "^1.1.5",
     "git-branch": "^2.0.1",
     "imagemin": "^7.0.1",
     "imagemin-jpegtran": "^6.0.0",
@@ -101,9 +118,12 @@
     "sass": "^1.26.3",
     "source-map-loader": "^0.2.4",
     "uuid": "^7.0.3",
+    "wdio-chromedriver-service": "^6.0.2",
     "webpack": "^4.42.1",
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cleanup-plugin": "^0.5.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {}

@@ -1225,14 +1225,16 @@ Destination.commModes = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return WindowIframeDestination; });
-/* harmony import */ var _messServ_destinations_destination_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/destinations/destination.js */ "./src/destinations/destination.js");
+/* harmony import */ var _messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/messages/message.js */ "./src/messages/message.js");
+/* harmony import */ var _messServ_destinations_destination_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @messServ/destinations/destination.js */ "./src/destinations/destination.js");
 /**
  * @module WindowIframeDestination
  */
 
 
+
 /** WindowIframeDestination represents a content window within an iframe */
-class WindowIframeDestination extends _messServ_destinations_destination_js__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class WindowIframeDestination extends _messServ_destinations_destination_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
   /**
    * @param {object} [configuration={}] - An object containing configuration parameters.
    * @param {string} configuration.name - A name of a destination (for addressing a destination in a messaging service).
@@ -1353,6 +1355,9 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
    * @private
    */
   _requestHandler (callbackFn, event) {
+    // Check if an event contains a valid Alpheios message object.
+    if (!WindowIframeDestination._isSupportedEvent(event)) { return }
+
     // `data` prop of an event contains a request message object
     let request = event.data // eslint-disable-line prefer-const
     request.header.origin = event.origin
@@ -1366,18 +1371,25 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
    * @private
    */
   _responseHandler (event) {
-    if (!event.data || !event.data.type) {
-      /*
-      Event does not have a data prop that contains a message object. We cannot handle such events and will ignore theml
-      */
-      return
-    }
+    // Check if an event contains a valid Alpheios message object.
+    if (!WindowIframeDestination._isSupportedEvent(event)) { return }
 
     // `data` prop of an event contains a response message object
     const responseMessage = event.data
     if (this._responseCallback) {
       this._responseCallback(responseMessage)
     }
+  }
+
+  /**
+   * Checks whether an event contains a well-formed Alpheios message object.
+   *
+   * @param {Event} event - An event that may contain a message object in a `data` field.
+   * @returns {boolean} - True if an event contains a well-formed Alpheios message object, false otherwise.
+   * @private
+   */
+  static _isSupportedEvent (event) {
+    return Boolean(event && event.data && event.data.type && _messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__["default"].isKnownType(event.data.type))
   }
 
   /**

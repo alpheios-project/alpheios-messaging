@@ -1,6 +1,7 @@
 /**
  * @module WindowIframeDestination
  */
+import Message from '@messServ/messages/message.js'
 import Destination from '@messServ/destinations/destination.js'
 
 /** WindowIframeDestination represents a content window within an iframe */
@@ -125,6 +126,9 @@ export default class WindowIframeDestination extends Destination {
    * @private
    */
   _requestHandler (callbackFn, event) {
+    // Check if an event contains a valid Alpheios message object.
+    if (!WindowIframeDestination._isSupportedEvent(event)) { return }
+
     // `data` prop of an event contains a request message object
     let request = event.data // eslint-disable-line prefer-const
     request.header.origin = event.origin
@@ -138,18 +142,25 @@ export default class WindowIframeDestination extends Destination {
    * @private
    */
   _responseHandler (event) {
-    if (!event.data || !event.data.type) {
-      /*
-      Event does not have a data prop that contains a message object. We cannot handle such events and will ignore theml
-      */
-      return
-    }
+    // Check if an event contains a valid Alpheios message object.
+    if (!WindowIframeDestination._isSupportedEvent(event)) { return }
 
     // `data` prop of an event contains a response message object
     const responseMessage = event.data
     if (this._responseCallback) {
       this._responseCallback(responseMessage)
     }
+  }
+
+  /**
+   * Checks whether an event contains a well-formed Alpheios message object.
+   *
+   * @param {Event} event - An event that may contain a message object in a `data` field.
+   * @returns {boolean} - True if an event contains a well-formed Alpheios message object, false otherwise.
+   * @private
+   */
+  static _isSupportedEvent (event) {
+    return Boolean(event && event.data && event.data.type && Message.isKnownType(event.data.type))
   }
 
   /**

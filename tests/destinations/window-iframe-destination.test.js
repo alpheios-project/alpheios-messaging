@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import Message from '@messServ/messages/message.js'
 import Destination from '@messServ/destinations/destination.js'
 import WindowIframeDestination from '@messServ/destinations/window-iframe-destination.js'
 
@@ -69,5 +70,29 @@ describe('WindowIframeDestination class', () => {
     const destination = new WindowIframeDestination(configuration)
     destination.registerResponseCallback(callbackFn)
     expect(destination._responseCallback).toBe(callbackFn)
+  })
+
+  it('_isSupportedEvent: fails if no event object is provided', () => {
+    const event = undefined
+    expect(WindowIframeDestination._isSupportedEvent(event)).toBeFalsy()
+  })
+
+  it('_isSupportedEvent: fails if an event object with no data is provided', () => {
+    const event = {}
+    expect(WindowIframeDestination._isSupportedEvent(event)).toBeFalsy()
+  })
+
+  it("_isSupportedEvent: fails if an event object's data is not an Alpheios message", () => {
+    const event = {
+      data: {}
+    }
+    expect(WindowIframeDestination._isSupportedEvent(event)).toBeFalsy()
+  })
+
+  it("_isSupportedEvent: succeeds if an event object's data is an Alpheios message", () => {
+    const event = {
+      data: new Message()
+    }
+    expect(WindowIframeDestination._isSupportedEvent(event)).toBeTruthy()
   })
 })
