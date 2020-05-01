@@ -1288,7 +1288,26 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
       // If we can access a target iframe location and its URL is blank it means an iframe content is not loaded yet.
       throw new Error(`Target document ${this._targetURL} is not loaded yet`)
     }
-    iframeWindow.postMessage(requestMessage, this._targetURL)
+    try {
+      iframeWindow.postMessage(requestMessage, this._targetURL)
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'DataCloneError') {
+        /*
+        A message body does not confirm the structured clone algorithm and thus cannot be send via `postMessage`.
+        See https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
+        for more details.
+        We'll try to convert it to a plain object.
+         */
+        console.warn('Request that does not confirm to the structured clone algorithm cannot be sent, ' +
+          'will try to convert it to a plain object and send again')
+        requestMessage.body = WindowIframeDestination._toPostable(requestMessage.body)
+        // Try to resend a message
+        iframeWindow.postMessage(requestMessage, this._targetURL)
+      } else {
+        // Some other error occurred, rethrow it
+        throw err
+      }
+    }
   }
 
   /**
@@ -1297,7 +1316,26 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
    * @param {ResponseMessage} responseMessage - A response message object.
    */
   sendResponse (responseMessage) {
-    window.parent.postMessage(responseMessage, responseMessage.requestHeader.origin)
+    try {
+      window.parent.postMessage(responseMessage, responseMessage.requestHeader.origin)
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'DataCloneError') {
+        /*
+        A message body does not confirm the structured clone algorithm and thus cannot be send via `postMessage`.
+        See https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
+        for more details.
+        We'll try to convert it to a plain object.
+         */
+        console.warn('Response that does not confirm to the structured clone algorithm cannot be sent, ' +
+                     'will try to convert it to a plain object and send again')
+        responseMessage.body = WindowIframeDestination._toPostable(responseMessage.body)
+        // Try to resend a message
+        window.parent.postMessage(responseMessage, responseMessage.requestHeader.origin)
+      } else {
+        // Some other error occurred, rethrow it
+        throw err
+      }
+    }
   }
 
   /**
@@ -1360,6 +1398,33 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
       window.removeEventListener('message', this._registeredRequestHandler, false)
       this._registeredRequestHandler = null
     }
+  }
+
+  /**
+   * Converts an object to the one that is conforms the structured clone algorithm.
+   * See https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
+   * for more details.
+   *
+   * @param {object} message - An object to convert.
+   * @returns {object} - An object that conforms to the structured clone algorithm.
+   * @private
+   */
+  static _toPostable (message) {
+    let postable
+    if (message instanceof Error) {
+      /*
+      Due to the bug in FF, Errors cannot be sent via postMessage yet.
+      Please see https://bugzilla.mozilla.org/show_bug.cgi?id=1556604 for more details.
+      This code can be removed once the bug is fixed.
+       */
+      postable = {
+        name: message.name,
+        message: message.message
+      }
+    } else {
+      postable = JSON.parse(JSON.stringify(message))
+    }
+    return postable
   }
 }
 
