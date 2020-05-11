@@ -9,53 +9,57 @@ export default class WindowIframeDestination extends Destination {
   /**
    * @param {object} [configuration={}] - An object containing configuration parameters.
    * @param {string} configuration.name - A name of a destination (for addressing a destination in a messaging service).
-   * @param {string} configuration.targetURL - A URL of a document within an iframe where messages will be sent.
-   * @param {string} configuration.targetIframeID - An ID of an iframe element (without `#`).
    * @param {string[]} configuration.commModes - A list of communication modes that should be enabled for
    *        a destination. A list of available modes is defined in Destination.commModes.
+   * @param {string} configuration.targetURL - A URL of a document within an iframe where messages will be sent.
+   * @param {string} configuration.targetIframeID - An ID of an iframe element (without `#`).
    * @param {Function} configuration.receiverCB - A function that will be called when destination is in the
    *        RECEIVE mode and the incoming request has arrived. This function will receive two parameters:
    *        the message object and the function that will need to be called in order to send a response back.
    */
-  constructor ({ name, targetURL, targetIframeID, commModes, receiverCB } = {}) {
+  constructor ({ name, commModes, targetURL, targetIframeID, receiverCB } = {}) {
     super({ name, commModes })
-
-    if (!targetURL) {
-      throw new Error('Target URL is not provided')
-    }
-
-    if (!targetIframeID) {
-      throw new Error('Target iframe ID is not provided')
-    }
-
     /**
      * A URL of a document within an iframe where messages will be sent.
      *
-     * @type {string}
+     * @type {string | null}
      * @private
      */
-    this._targetURL = targetURL
+    this._targetURL = null
 
     /**
      * An ID of an iframe element (without `#`).
      *
-     * @type {string}
+     * @type {string | null}
      * @private
      */
-    this._targetIframeID = targetIframeID
-
-    if (this.ableToReceive) {
-      // Destination is initialized in the receive mode
-      if (!receiverCB) {
-        throw new Error('A receiver callback must be provided for a destination in the RECEIVE communication mode')
-      }
-      this._registeredRequestHandler = this._requestHandler.bind(this, receiverCB)
-      window.addEventListener('message', this._registeredRequestHandler, false)
-    }
+    this._targetIframeID = null
 
     // The following two props will keep track of request and response handlers registered for this destination.
     this._registeredRequestHandler = null
     this._registeredResponseHandler = null
+
+    if (this.ableToSend) {
+      if (!targetURL) {
+        throw new Error(WindowIframeDestination.errMsgs.NO_TARGET_URL)
+      }
+
+      if (!targetIframeID) {
+        throw new Error(WindowIframeDestination.errMsgs.NO_TARGET_IFRAME_ID)
+      }
+
+      this._targetURL = targetURL
+      this._targetIframeID = targetIframeID
+    }
+
+    if (this.ableToReceive) {
+      // Destination is initialized in the receive mode
+      if (!receiverCB) {
+        throw new Error(WindowIframeDestination.errMsgs.NO_RECEIVER_CB)
+      }
+      this._registeredRequestHandler = this._requestHandler.bind(this, receiverCB)
+      window.addEventListener('message', this._registeredRequestHandler, false)
+    }
   }
 
   /**
@@ -243,4 +247,10 @@ export default class WindowIframeDestination extends Destination {
     }
     return postable
   }
+}
+
+WindowIframeDestination.errMsgs = {
+  NO_TARGET_URL: 'Target URL is not provided',
+  NO_TARGET_IFRAME_ID: 'Target iframe ID is not provided',
+  NO_RECEIVER_CB: 'A receiver callback must be provided for a destination in the RECEIVE communication mode'
 }

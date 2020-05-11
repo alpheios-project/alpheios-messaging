@@ -16,7 +16,7 @@ export default class Destination {
    */
   constructor ({ name, commModes = [Destination.commModes.SEND] } = {}) {
     if (!name) {
-      throw new Error('Destination name is missing')
+      throw new Error(Destination.errMsgs.NO_DESTINATION)
     }
 
     /**
@@ -67,7 +67,7 @@ export default class Destination {
    * It must do a cleanup necessary for a destination object. Its functionality should be defined within a subclass.
    */
   deregister () {
-    throw new Error('Deregister method must be defined in a subclass')
+    throw new Error(Destination.errMsgs.DEREGISTER_NOT_DEFINED)
   }
 }
 
@@ -84,4 +84,9 @@ Destination.commModes = {
   A RECEIVE mode enables destination to receive messages from other destinations of the same type.
    */
   RECEIVE: 'Receive'
+}
+
+Destination.errMsgs = {
+  NO_DESTINATION: 'Destination name is missing',
+  DEREGISTER_NOT_DEFINED: 'Deregister method must be defined in a subclass'
 }

@@ -13,7 +13,7 @@ describe('Destination class', () => {
   })
 
   it('Constructor: name must be provided', () => {
-    expect(() => new Destination()).toThrowError('Destination name is missing')
+    expect(() => new Destination()).toThrowError(Destination.errMsgs.NO_DESTINATION)
   })
 
   it('Constructor: SEND mode should be enabled by default', () => {

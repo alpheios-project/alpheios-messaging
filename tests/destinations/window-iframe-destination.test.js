@@ -19,6 +19,11 @@ describe('WindowIframeDestination class', () => {
     })
   })
 
+  it('Constructor: should default to a SEND mode if none is provided', () => {
+    const destination = new WindowIframeDestination(configuration)
+    expect(destination.ableToSend).toBeTruthy()
+  })
+
   it('Constructor: shall create an object in a RECEIVE mode', () => {
     const configuration = {
       name: 'Destination name',
@@ -36,33 +41,63 @@ describe('WindowIframeDestination class', () => {
       targetURL: 'Target URL',
       targetIframeID: 'Target iframe ID'
     }
-    expect(() => new WindowIframeDestination(configuration)).toThrowError('Destination name is missing')
+    expect(() => new WindowIframeDestination(configuration)).toThrowError(WindowIframeDestination.errMsgs.NO_DESTINATION)
   })
 
-  it('Constructor: targetURL must be provided', () => {
+  it('Constructor: throws an error if targetURL is missing in a SEND mode', () => {
     const configuration = {
       name: 'Destination name',
-      targetIframeID: 'Target iframe ID'
+      targetIframeID: 'Target iframe ID',
+      commModes: [Destination.commModes.SEND]
     }
-    expect(() => new WindowIframeDestination(configuration)).toThrowError('Target URL is not provided')
+    expect(() => new WindowIframeDestination(configuration)).toThrowError(WindowIframeDestination.errMsgs.NO_TARGET_URL)
   })
 
-  it('Constructor: target iframe ID must be provided', () => {
+  it('Constructor: throws an error if target iframe ID is missing in a SEND mode', () => {
     const configuration = {
       name: 'Destination name',
-      targetURL: 'Target URL'
+      targetURL: 'Target URL',
+      commModes: [Destination.commModes.SEND]
     }
-    expect(() => new WindowIframeDestination(configuration)).toThrowError('Target iframe ID is not provided')
+    expect(() => new WindowIframeDestination(configuration)).toThrowError(WindowIframeDestination.errMsgs.NO_TARGET_IFRAME_ID)
   })
 
-  it('Constructor: receiver callback must be provided when in RECEIVE mode', () => {
+  it('Constructor: receiver callback is not required in a RECEIVE mode', () => {
+    const configuration = {
+      name: 'Destination name',
+      targetURL: 'Target URL',
+      targetIframeID: 'Target iframe ID',
+      commModes: [Destination.commModes.SEND]
+    }
+    expect(() => new WindowIframeDestination(configuration)).not.toThrowError(WindowIframeDestination.errMsgs.NO_RECEIVER_CB)
+  })
+
+  it('Constructor: receiver callback must be provided when in a RECEIVE mode', () => {
     const configuration = {
       name: 'Destination name',
       targetURL: 'Target URL',
       targetIframeID: 'Target iframe ID',
       commModes: [Destination.commModes.RECEIVE]
     }
-    expect(() => new WindowIframeDestination(configuration)).toThrowError('A receiver callback must be provided for a destination in the RECEIVE communication mode')
+    expect(() => new WindowIframeDestination(configuration)).toThrowError(WindowIframeDestination.errMsgs.NO_RECEIVER_CB)
+  })
+
+  it('Constructor: targetURL is is not required in a RECEIVE mode', () => {
+    const configuration = {
+      name: 'Destination name',
+      targetIframeID: 'Target iframe ID',
+      commModes: [Destination.commModes.RECEIVE]
+    }
+    expect(() => new WindowIframeDestination(configuration)).not.toThrowError(WindowIframeDestination.errMsgs.NO_TARGET_URL)
+  })
+
+  it('Constructor: target iframe ID is is not required in a RECEIVE mode', () => {
+    const configuration = {
+      name: 'Destination name',
+      targetURL: 'Target URL',
+      commModes: [Destination.commModes.RECEIVE]
+    }
+    expect(() => new WindowIframeDestination(configuration)).not.toThrowError(WindowIframeDestination.errMsgs.NO_TARGET_IFRAME_ID)
   })
 
   it('registerResponseCallback: assign a callback function', () => {
