@@ -62,7 +62,7 @@ describe('WindowIframeDestination class', () => {
     expect(() => new WindowIframeDestination(configuration)).toThrowError(WindowIframeDestination.errMsgs.NO_TARGET_IFRAME_ID)
   })
 
-  it('Constructor: receiver callback is not required in a RECEIVE mode', () => {
+  it('Constructor: receiver callback is not required in a SEND mode', () => {
     const configuration = {
       name: 'Destination name',
       targetURL: 'Target URL',
