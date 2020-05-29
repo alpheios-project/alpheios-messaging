@@ -7,6 +7,14 @@ Alpheios messaging is a messaging service component for Alpheios Tools.
 
 ## Service Overview
 
+A `MessagingService` was created to send messages between different parties in a simple and unobtrusive way, no matter where the party is located and what is the messaging protocol. It is a higher level abstraction made to hide a complexity of lower level implementation details.
+
+Details such as party location and messaging protocol are encapsulated within a `Destination` object. Each `Destination` instance represents a combination of a protocol and a destination name. Two different destinations that use the same protocol would be represented by two different `Destination` objects.
+
+Once a `Destination` object is registered with a `MessagingService` it is enough to know just a name of it in order to send a message.
+
+Here is a high-level diagram of a `MessagingService`:
+![Architecture of a messaging service](https://raw.githubusercontent.com/alpheios-project/alpheios-messaging/i7-documentation/docs/messaging-service-architecture.svg?sanitize=true)
 
 ## Messaging Service Singleton
 
@@ -84,6 +92,16 @@ const msgService = new MessagingService('serviceName', [destination])
 
 // Now, once a request comes in, a receiverCB() function will be called
 ```
+
+### WindowIframeDestination
+
+`WindowsIframeDestination` is a destination class to send messages between a webpage and its iframe(s) using a [`postMessage()` method](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) of a `widnow` object. Content of an `iframe` can be loaded from a different website; it allows to group business logic and data from different locations together and `WindowsIframeDestination` creates an effective communication channel between them.
+
+### Other Destinations
+
+Potentially, a `Destination` object can represent any location that could be communicated using any protocol. In addition to inter-iframe communication, a destination could be used represent a remote server. Data from this serer can be obtained using GraphQL, or Rest, or any other remote API over HTTP/S. Messages to a remote server can be used not only to obtain data, but also to trigger actions on that server.
+
+There could be other types of `Destination` objects. Almost anything that require communication could be represented by it.
 
 ### Request and Response Messages
 
