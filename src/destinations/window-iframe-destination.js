@@ -172,7 +172,7 @@ export default class WindowIframeDestination extends Destination {
     if (!WindowIframeDestination._isSupportedEvent(event)) { return }
 
     // `data` prop of an event contains a request message object
-    let request = event.data // eslint-disable-line prefer-const
+    let request = event.data  
     request.header.origin = event.origin
     callbackFn(request, this.sendResponse.bind(this))
   }

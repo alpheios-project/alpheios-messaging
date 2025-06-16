@@ -10,7 +10,7 @@ import StoredRequest from '@messServ/core/stored-request.js'
  *
  * @type {Map<string, MessagingService>}
  */
-let services = new Map() // eslint-disable-line prefer-const
+let services = new Map()  
 
 /** A messaging for sending and receiving messages to and from various destinations */
 export default class MessagingService {
@@ -167,7 +167,7 @@ export default class MessagingService {
    */
   registerRequest (request, timeout = 10000) {
     if (this._messages.has(request.ID)) throw new Error(`Request with ${request.ID} ID is already registered`)
-    let storedRequest = new StoredRequest(request) // eslint-disable-line prefer-const
+    let storedRequest = new StoredRequest(request)  
     this._messages.set(request.ID, storedRequest)
     storedRequest.timeoutID = window.setTimeout((requestID) => {
       storedRequest.reject(new Error(`Timeout has been expired for a message with request ID ${request.ID}`))

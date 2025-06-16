@@ -7,214 +7,22 @@
 		var a = factory();
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(global, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./index.js");
-/******/ })
-/************************************************************************/
-/******/ ({
+})(global, () => {
+return /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
 
-/***/ "./index.js":
-/*!******************!*\
-  !*** ./index.js ***!
-  \******************/
-/*! exports provided: MessagingService, WindowIframeDestination, RequestMessage, ResponseMessage, CedictDestinationConfig, CedictDestinationDevConfig */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _messServ_core_messaging_service_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/core/messaging-service.js */ "./src/core/messaging-service.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MessagingService", function() { return _messServ_core_messaging_service_js__WEBPACK_IMPORTED_MODULE_0__["default"]; });
-
-/* harmony import */ var _messServ_destinations_window_iframe_destination_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @messServ/destinations/window-iframe-destination.js */ "./src/destinations/window-iframe-destination.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "WindowIframeDestination", function() { return _messServ_destinations_window_iframe_destination_js__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
-/* harmony import */ var _messServ_messages_request_message_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @messServ/messages/request-message.js */ "./src/messages/request-message.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "RequestMessage", function() { return _messServ_messages_request_message_js__WEBPACK_IMPORTED_MODULE_2__["default"]; });
-
-/* harmony import */ var _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @messServ/messages/response-message.js */ "./src/messages/response-message.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ResponseMessage", function() { return _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_3__["default"]; });
-
-/* harmony import */ var _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @messServ/configurations/destinations.js */ "./src/configurations/destinations.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CedictDestinationConfig", function() { return _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__["CedictDestinationConfig"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CedictDestinationDevConfig", function() { return _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__["CedictDestinationDevConfig"]; });
-
-
-
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/uuid/dist/esm-node/bytesToUuid.js":
-/*!********************************************************!*\
-  !*** ./node_modules/uuid/dist/esm-node/bytesToUuid.js ***!
-  \********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-var byteToHex = [];
-
-for (var i = 0; i < 256; ++i) {
-  byteToHex[i] = (i + 0x100).toString(16).substr(1);
-}
-
-function bytesToUuid(buf, offset) {
-  var i = offset || 0;
-  var bth = byteToHex; // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
-
-  return [bth[buf[i++]], bth[buf[i++]], bth[buf[i++]], bth[buf[i++]], '-', bth[buf[i++]], bth[buf[i++]], '-', bth[buf[i++]], bth[buf[i++]], '-', bth[buf[i++]], bth[buf[i++]], '-', bth[buf[i++]], bth[buf[i++]], bth[buf[i++]], bth[buf[i++]], bth[buf[i++]], bth[buf[i++]]].join('');
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (bytesToUuid);
-
-/***/ }),
-
-/***/ "./node_modules/uuid/dist/esm-node/index.js":
+/***/ "./node_modules/uuid/dist/esm-node/regex.js":
 /*!**************************************************!*\
-  !*** ./node_modules/uuid/dist/esm-node/index.js ***!
+  !*** ./node_modules/uuid/dist/esm-node/regex.js ***!
   \**************************************************/
-/*! exports provided: v1, v3, v4, v5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _v1_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./v1.js */ "./node_modules/uuid/dist/esm-node/v1.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "v1", function() { return _v1_js__WEBPACK_IMPORTED_MODULE_0__["default"]; });
-
-/* harmony import */ var _v3_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./v3.js */ "./node_modules/uuid/dist/esm-node/v3.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "v3", function() { return _v3_js__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
-/* harmony import */ var _v4_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./v4.js */ "./node_modules/uuid/dist/esm-node/v4.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "v4", function() { return _v4_js__WEBPACK_IMPORTED_MODULE_2__["default"]; });
-
-/* harmony import */ var _v5_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./v5.js */ "./node_modules/uuid/dist/esm-node/v5.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "v5", function() { return _v5_js__WEBPACK_IMPORTED_MODULE_3__["default"]; });
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/uuid/dist/esm-node/md5.js":
-/*!************************************************!*\
-  !*** ./node_modules/uuid/dist/esm-node/md5.js ***!
-  \************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! crypto */ "crypto");
-/* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(crypto__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function md5(bytes) {
-  if (Array.isArray(bytes)) {
-    bytes = Buffer.from(bytes);
-  } else if (typeof bytes === 'string') {
-    bytes = Buffer.from(bytes, 'utf8');
-  }
-
-  return crypto__WEBPACK_IMPORTED_MODULE_0___default.a.createHash('md5').update(bytes).digest();
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (md5);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
 
 /***/ }),
 
@@ -222,243 +30,69 @@ function md5(bytes) {
 /*!************************************************!*\
   !*** ./node_modules/uuid/dist/esm-node/rng.js ***!
   \************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return rng; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ rng)
+/* harmony export */ });
 /* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! crypto */ "crypto");
 /* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(crypto__WEBPACK_IMPORTED_MODULE_0__);
 
+const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
+
+let poolPtr = rnds8Pool.length;
 function rng() {
-  return crypto__WEBPACK_IMPORTED_MODULE_0___default.a.randomBytes(16);
+  if (poolPtr > rnds8Pool.length - 16) {
+    crypto__WEBPACK_IMPORTED_MODULE_0___default().randomFillSync(rnds8Pool);
+    poolPtr = 0;
+  }
+
+  return rnds8Pool.slice(poolPtr, poolPtr += 16);
 }
 
 /***/ }),
 
-/***/ "./node_modules/uuid/dist/esm-node/sha1.js":
-/*!*************************************************!*\
-  !*** ./node_modules/uuid/dist/esm-node/sha1.js ***!
-  \*************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/uuid/dist/esm-node/stringify.js":
+/*!******************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-node/stringify.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! crypto */ "crypto");
-/* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(crypto__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/uuid/dist/esm-node/validate.js");
 
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
 
-function sha1(bytes) {
-  if (Array.isArray(bytes)) {
-    bytes = Buffer.from(bytes);
-  } else if (typeof bytes === 'string') {
-    bytes = Buffer.from(bytes, 'utf8');
-  }
+const byteToHex = [];
 
-  return crypto__WEBPACK_IMPORTED_MODULE_0___default.a.createHash('sha1').update(bytes).digest();
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).substr(1));
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (sha1);
+function stringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase(); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  // of the following:
+  // - One or more input array values don't map to a hex octet (leading to
+  // "undefined" in the uuid)
+  // - Invalid input values for the RFC `version` or `variant` fields
 
-/***/ }),
-
-/***/ "./node_modules/uuid/dist/esm-node/v1.js":
-/*!***********************************************!*\
-  !*** ./node_modules/uuid/dist/esm-node/v1.js ***!
-  \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./rng.js */ "./node_modules/uuid/dist/esm-node/rng.js");
-/* harmony import */ var _bytesToUuid_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bytesToUuid.js */ "./node_modules/uuid/dist/esm-node/bytesToUuid.js");
-
- // **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-
-var _nodeId;
-
-var _clockseq; // Previous uuid creation time
-
-
-var _lastMSecs = 0;
-var _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
-
-function v1(options, buf, offset) {
-  var i = buf && offset || 0;
-  var b = buf || [];
-  options = options || {};
-  var node = options.node || _nodeId;
-  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-
-  if (node == null || clockseq == null) {
-    var seedBytes = options.random || (options.rng || _rng_js__WEBPACK_IMPORTED_MODULE_0__["default"])();
-
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
-    }
-
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-
-
-  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime(); // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-
-  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
-
-  var dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
-
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-
-
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  } // Per 4.2.1.2 Throw error if too many uuids are requested
-
-
-  if (nsecs >= 10000) {
-    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
+  if (!(0,_validate_js__WEBPACK_IMPORTED_MODULE_0__["default"])(uuid)) {
+    throw TypeError('Stringified UUID is invalid');
   }
 
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-
-  msecs += 12219292800000; // `time_low`
-
-  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff; // `time_mid`
-
-  var tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff; // `time_high_and_version`
-
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-
-  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-
-  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
-
-  b[i++] = clockseq & 0xff; // `node`
-
-  for (var n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf ? buf : Object(_bytesToUuid_js__WEBPACK_IMPORTED_MODULE_1__["default"])(b);
+  return uuid;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (v1);
-
-/***/ }),
-
-/***/ "./node_modules/uuid/dist/esm-node/v3.js":
-/*!***********************************************!*\
-  !*** ./node_modules/uuid/dist/esm-node/v3.js ***!
-  \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _v35_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./v35.js */ "./node_modules/uuid/dist/esm-node/v35.js");
-/* harmony import */ var _md5_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./md5.js */ "./node_modules/uuid/dist/esm-node/md5.js");
-
-
-const v3 = Object(_v35_js__WEBPACK_IMPORTED_MODULE_0__["default"])('v3', 0x30, _md5_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
-/* harmony default export */ __webpack_exports__["default"] = (v3);
-
-/***/ }),
-
-/***/ "./node_modules/uuid/dist/esm-node/v35.js":
-/*!************************************************!*\
-  !*** ./node_modules/uuid/dist/esm-node/v35.js ***!
-  \************************************************/
-/*! exports provided: DNS, URL, default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DNS", function() { return DNS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "URL", function() { return URL; });
-/* harmony import */ var _bytesToUuid_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bytesToUuid.js */ "./node_modules/uuid/dist/esm-node/bytesToUuid.js");
-
-
-function uuidToBytes(uuid) {
-  // Note: We assume we're being passed a valid uuid string
-  var bytes = [];
-  uuid.replace(/[a-fA-F0-9]{2}/g, function (hex) {
-    bytes.push(parseInt(hex, 16));
-  });
-  return bytes;
-}
-
-function stringToBytes(str) {
-  str = unescape(encodeURIComponent(str)); // UTF8 escape
-
-  var bytes = new Array(str.length);
-
-  for (var i = 0; i < str.length; i++) {
-    bytes[i] = str.charCodeAt(i);
-  }
-
-  return bytes;
-}
-
-const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
-const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
-/* harmony default export */ __webpack_exports__["default"] = (function (name, version, hashfunc) {
-  var generateUUID = function (value, namespace, buf, offset) {
-    var off = buf && offset || 0;
-    if (typeof value == 'string') value = stringToBytes(value);
-    if (typeof namespace == 'string') namespace = uuidToBytes(namespace);
-    if (!Array.isArray(value)) throw TypeError('value must be an array of bytes');
-    if (!Array.isArray(namespace) || namespace.length !== 16) throw TypeError('namespace must be uuid string or an Array of 16 byte values'); // Per 4.3
-
-    var bytes = hashfunc(namespace.concat(value));
-    bytes[6] = bytes[6] & 0x0f | version;
-    bytes[8] = bytes[8] & 0x3f | 0x80;
-
-    if (buf) {
-      for (var idx = 0; idx < 16; ++idx) {
-        buf[off + idx] = bytes[idx];
-      }
-    }
-
-    return buf || Object(_bytesToUuid_js__WEBPACK_IMPORTED_MODULE_0__["default"])(bytes);
-  }; // Function#name is not settable on some platforms (#270)
-
-
-  try {
-    generateUUID.name = name;
-  } catch (err) {} // For CommonJS default export support
-
-
-  generateUUID.DNS = DNS;
-  generateUUID.URL = URL;
-  return generateUUID;
-});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (stringify);
 
 /***/ }),
 
@@ -466,58 +100,59 @@ const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
 /*!***********************************************!*\
   !*** ./node_modules/uuid/dist/esm-node/v4.js ***!
   \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./rng.js */ "./node_modules/uuid/dist/esm-node/rng.js");
-/* harmony import */ var _bytesToUuid_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bytesToUuid.js */ "./node_modules/uuid/dist/esm-node/bytesToUuid.js");
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/uuid/dist/esm-node/stringify.js");
 
 
 
 function v4(options, buf, offset) {
-  var i = buf && offset || 0;
-
-  if (typeof options == 'string') {
-    buf = options === 'binary' ? new Array(16) : null;
-    options = null;
-  }
-
   options = options || {};
-  var rnds = options.random || (options.rng || _rng_js__WEBPACK_IMPORTED_MODULE_0__["default"])(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  const rnds = options.random || (options.rng || _rng_js__WEBPACK_IMPORTED_MODULE_0__["default"])(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
 
   rnds[6] = rnds[6] & 0x0f | 0x40;
   rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
 
   if (buf) {
-    for (var ii = 0; ii < 16; ++ii) {
-      buf[i + ii] = rnds[ii];
+    offset = offset || 0;
+
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
     }
+
+    return buf;
   }
 
-  return buf || Object(_bytesToUuid_js__WEBPACK_IMPORTED_MODULE_1__["default"])(rnds);
+  return (0,_stringify_js__WEBPACK_IMPORTED_MODULE_1__["default"])(rnds);
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (v4);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);
 
 /***/ }),
 
-/***/ "./node_modules/uuid/dist/esm-node/v5.js":
-/*!***********************************************!*\
-  !*** ./node_modules/uuid/dist/esm-node/v5.js ***!
-  \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/uuid/dist/esm-node/validate.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-node/validate.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _v35_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./v35.js */ "./node_modules/uuid/dist/esm-node/v35.js");
-/* harmony import */ var _sha1_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sha1.js */ "./node_modules/uuid/dist/esm-node/sha1.js");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regex.js */ "./node_modules/uuid/dist/esm-node/regex.js");
 
 
-const v5 = Object(_v35_js__WEBPACK_IMPORTED_MODULE_0__["default"])('v5', 0x50, _sha1_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
-/* harmony default export */ __webpack_exports__["default"] = (v5);
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex_js__WEBPACK_IMPORTED_MODULE_0__["default"].test(uuid);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validate);
 
 /***/ }),
 
@@ -525,13 +160,13 @@ const v5 = Object(_v35_js__WEBPACK_IMPORTED_MODULE_0__["default"])('v5', 0x50, _
 /*!********************************************!*\
   !*** ./src/configurations/destinations.js ***!
   \********************************************/
-/*! exports provided: CedictDestinationConfig, CedictDestinationDevConfig */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CedictDestinationConfig", function() { return CedictDestinationConfig; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CedictDestinationDevConfig", function() { return CedictDestinationDevConfig; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CedictDestinationConfig: () => (/* binding */ CedictDestinationConfig),
+/* harmony export */   CedictDestinationDevConfig: () => (/* binding */ CedictDestinationDevConfig)
+/* harmony export */ });
 /**
  * This is a configuration of a WindowsIframeDestination that can be used to connect to CEDICT client service.
  *
@@ -560,12 +195,12 @@ const CedictDestinationDevConfig = {
 /*!***************************************!*\
   !*** ./src/core/messaging-service.js ***!
   \***************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MessagingService; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ MessagingService)
+/* harmony export */ });
 /* harmony import */ var _messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/messages/message.js */ "./src/messages/message.js");
 /* harmony import */ var _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @messServ/messages/response-message.js */ "./src/messages/response-message.js");
 /* harmony import */ var _messServ_core_stored_request_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @messServ/core/stored-request.js */ "./src/core/stored-request.js");
@@ -786,12 +421,12 @@ MessagingService.errMsgs = {
 /*!************************************!*\
   !*** ./src/core/stored-request.js ***!
   \************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return StoredRequest; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StoredRequest)
+/* harmony export */ });
 /**
  * @module StoredRequest
  */
@@ -830,12 +465,12 @@ class StoredRequest {
 /*!*****************************************!*\
   !*** ./src/destinations/destination.js ***!
   \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Destination; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Destination)
+/* harmony export */ });
 /**
  * @module Destination
  */
@@ -854,7 +489,7 @@ class Destination {
    */
   constructor ({ name, commModes = [Destination.commModes.SEND] } = {}) {
     if (!name) {
-      throw new Error('Destination name is missing')
+      throw new Error(Destination.errMsgs.NO_DESTINATION)
     }
 
     /**
@@ -905,7 +540,7 @@ class Destination {
    * It must do a cleanup necessary for a destination object. Its functionality should be defined within a subclass.
    */
   deregister () {
-    throw new Error('Deregister method must be defined in a subclass')
+    throw new Error(Destination.errMsgs.DEREGISTER_NOT_DEFINED)
   }
 }
 
@@ -924,6 +559,11 @@ Destination.commModes = {
   RECEIVE: 'Receive'
 }
 
+Destination.errMsgs = {
+  NO_DESTINATION: 'Destination name is missing',
+  DEREGISTER_NOT_DEFINED: 'Deregister method must be defined in a subclass'
+}
+
 
 /***/ }),
 
@@ -931,12 +571,12 @@ Destination.commModes = {
 /*!*******************************************************!*\
   !*** ./src/destinations/window-iframe-destination.js ***!
   \*******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return WindowIframeDestination; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ WindowIframeDestination)
+/* harmony export */ });
 /* harmony import */ var _messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/messages/message.js */ "./src/messages/message.js");
 /* harmony import */ var _messServ_destinations_destination_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @messServ/destinations/destination.js */ "./src/destinations/destination.js");
 /**
@@ -950,53 +590,57 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
   /**
    * @param {object} [configuration={}] - An object containing configuration parameters.
    * @param {string} configuration.name - A name of a destination (for addressing a destination in a messaging service).
-   * @param {string} configuration.targetURL - A URL of a document within an iframe where messages will be sent.
-   * @param {string} configuration.targetIframeID - An ID of an iframe element (without `#`).
    * @param {string[]} configuration.commModes - A list of communication modes that should be enabled for
    *        a destination. A list of available modes is defined in Destination.commModes.
+   * @param {string} configuration.targetURL - A URL of a document within an iframe where messages will be sent.
+   * @param {string} configuration.targetIframeID - An ID of an iframe element (without `#`).
    * @param {Function} configuration.receiverCB - A function that will be called when destination is in the
    *        RECEIVE mode and the incoming request has arrived. This function will receive two parameters:
    *        the message object and the function that will need to be called in order to send a response back.
    */
-  constructor ({ name, targetURL, targetIframeID, commModes, receiverCB } = {}) {
+  constructor ({ name, commModes, targetURL, targetIframeID, receiverCB } = {}) {
     super({ name, commModes })
-
-    if (!targetURL) {
-      throw new Error('Target URL is not provided')
-    }
-
-    if (!targetIframeID) {
-      throw new Error('Target iframe ID is not provided')
-    }
-
     /**
      * A URL of a document within an iframe where messages will be sent.
      *
-     * @type {string}
+     * @type {string | null}
      * @private
      */
-    this._targetURL = targetURL
+    this._targetURL = null
 
     /**
      * An ID of an iframe element (without `#`).
      *
-     * @type {string}
+     * @type {string | null}
      * @private
      */
-    this._targetIframeID = targetIframeID
-
-    if (this.ableToReceive) {
-      // Destination is initialized in the receive mode
-      if (!receiverCB) {
-        throw new Error('A receiver callback must be provided for a destination in the RECEIVE communication mode')
-      }
-      this._registeredRequestHandler = this._requestHandler.bind(this, receiverCB)
-      window.addEventListener('message', this._registeredRequestHandler, false)
-    }
+    this._targetIframeID = null
 
     // The following two props will keep track of request and response handlers registered for this destination.
     this._registeredRequestHandler = null
     this._registeredResponseHandler = null
+
+    if (this.ableToSend) {
+      if (!targetURL) {
+        throw new Error(WindowIframeDestination.errMsgs.NO_TARGET_URL)
+      }
+
+      if (!targetIframeID) {
+        throw new Error(WindowIframeDestination.errMsgs.NO_TARGET_IFRAME_ID)
+      }
+
+      this._targetURL = targetURL
+      this._targetIframeID = targetIframeID
+    }
+
+    if (this.ableToReceive) {
+      // Destination is initialized in the receive mode
+      if (!receiverCB) {
+        throw new Error(WindowIframeDestination.errMsgs.NO_RECEIVER_CB)
+      }
+      this._registeredRequestHandler = this._requestHandler.bind(this, receiverCB)
+      window.addEventListener('message', this._registeredRequestHandler, false)
+    }
   }
 
   /**
@@ -1186,6 +830,12 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
   }
 }
 
+WindowIframeDestination.errMsgs = {
+  NO_TARGET_URL: 'Target URL is not provided',
+  NO_TARGET_IFRAME_ID: 'Target iframe ID is not provided',
+  NO_RECEIVER_CB: 'A receiver callback must be provided for a destination in the RECEIVE communication mode'
+}
+
 
 /***/ }),
 
@@ -1193,13 +843,13 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
 /*!*********************************!*\
   !*** ./src/messages/message.js ***!
   \*********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Message; });
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-node/index.js");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Message)
+/* harmony export */ });
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-node/v4.js");
 /**
  * @module Message
  */
@@ -1230,7 +880,7 @@ class Message {
      *
      * @type {string}
      */
-    this.ID = Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])()
+    this.ID = (0,uuid__WEBPACK_IMPORTED_MODULE_0__["default"])()
 
     /**
      * An object with no methods representing a message body.
@@ -1270,12 +920,12 @@ Message.types = {
 /*!*****************************************!*\
   !*** ./src/messages/request-message.js ***!
   \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RequestMessage; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ RequestMessage)
+/* harmony export */ });
 /* harmony import */ var _messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/messages/message.js */ "./src/messages/message.js");
 /**
  * @module RequestMessage
@@ -1307,12 +957,12 @@ class RequestMessage extends _messServ_messages_message_js__WEBPACK_IMPORTED_MOD
 /*!******************************************!*\
   !*** ./src/messages/response-message.js ***!
   \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ResponseMessage; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ResponseMessage)
+/* harmony export */ });
 /* harmony import */ var _messServ_messages_message_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/messages/message.js */ "./src/messages/message.js");
 /* harmony import */ var _messServ_messages_request_message_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @messServ/messages/request-message.js */ "./src/messages/request-message.js");
 /**
@@ -1430,13 +1080,112 @@ ResponseMessage.errorCodes = {
 /*!*************************!*\
   !*** external "crypto" ***!
   \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 module.exports = require("crypto");
 
 /***/ })
 
-/******/ });
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CedictDestinationConfig: () => (/* reexport safe */ _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__.CedictDestinationConfig),
+/* harmony export */   CedictDestinationDevConfig: () => (/* reexport safe */ _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__.CedictDestinationDevConfig),
+/* harmony export */   MessagingService: () => (/* reexport safe */ _messServ_core_messaging_service_js__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   RequestMessage: () => (/* reexport safe */ _messServ_messages_request_message_js__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   ResponseMessage: () => (/* reexport safe */ _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_3__["default"]),
+/* harmony export */   WindowIframeDestination: () => (/* reexport safe */ _messServ_destinations_window_iframe_destination_js__WEBPACK_IMPORTED_MODULE_1__["default"])
+/* harmony export */ });
+/* harmony import */ var _messServ_core_messaging_service_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @messServ/core/messaging-service.js */ "./src/core/messaging-service.js");
+/* harmony import */ var _messServ_destinations_window_iframe_destination_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @messServ/destinations/window-iframe-destination.js */ "./src/destinations/window-iframe-destination.js");
+/* harmony import */ var _messServ_messages_request_message_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @messServ/messages/request-message.js */ "./src/messages/request-message.js");
+/* harmony import */ var _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @messServ/messages/response-message.js */ "./src/messages/response-message.js");
+/* harmony import */ var _messServ_configurations_destinations_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @messServ/configurations/destinations.js */ "./src/configurations/destinations.js");
+
+
+
+
+
+
+
+
+})();
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
 });
 //# sourceMappingURL=alpheios-messaging.node.js.map
