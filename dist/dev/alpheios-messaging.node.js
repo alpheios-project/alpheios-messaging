@@ -216,7 +216,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @type {Map<string, MessagingService>}
  */
-let services = new Map() // eslint-disable-line prefer-const
+let services = new Map()  
 
 /** A messaging for sending and receiving messages to and from various destinations */
 class MessagingService {
@@ -350,7 +350,7 @@ class MessagingService {
       return
     }
     const requestInfo = this._messages.get(message.requestID)
-    window.clearTimeout(requestInfo.timeoutID) // Clear a timeout
+    clearTimeout(requestInfo.timeoutID) // Clear a timeout
     const responseCode = message.responseCode
 
     if (responseCode === _messServ_messages_response_message_js__WEBPACK_IMPORTED_MODULE_1__["default"].responseCodes.ERROR) {
@@ -373,9 +373,9 @@ class MessagingService {
    */
   registerRequest (request, timeout = 10000) {
     if (this._messages.has(request.ID)) throw new Error(`Request with ${request.ID} ID is already registered`)
-    let storedRequest = new _messServ_core_stored_request_js__WEBPACK_IMPORTED_MODULE_2__["default"](request) // eslint-disable-line prefer-const
+    let storedRequest = new _messServ_core_stored_request_js__WEBPACK_IMPORTED_MODULE_2__["default"](request)  
     this._messages.set(request.ID, storedRequest)
-    storedRequest.timeoutID = window.setTimeout((requestID) => {
+    storedRequest.timeoutID = setTimeout((requestID) => {
       storedRequest.reject(new Error(`Timeout has been expired for a message with request ID ${request.ID}`))
       this._messages.delete(requestID) // Remove request record from the map
     }, timeout)
@@ -753,7 +753,7 @@ class WindowIframeDestination extends _messServ_destinations_destination_js__WEB
     if (!WindowIframeDestination._isSupportedEvent(event)) { return }
 
     // `data` prop of an event contains a request message object
-    let request = event.data // eslint-disable-line prefer-const
+    let request = event.data  
     request.header.origin = event.origin
     callbackFn(request, this.sendResponse.bind(this))
   }

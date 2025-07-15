@@ -144,7 +144,7 @@ export default class MessagingService {
       return
     }
     const requestInfo = this._messages.get(message.requestID)
-    window.clearTimeout(requestInfo.timeoutID) // Clear a timeout
+    clearTimeout(requestInfo.timeoutID) // Clear a timeout
     const responseCode = message.responseCode
 
     if (responseCode === ResponseMessage.responseCodes.ERROR) {
@@ -169,7 +169,7 @@ export default class MessagingService {
     if (this._messages.has(request.ID)) throw new Error(`Request with ${request.ID} ID is already registered`)
     let storedRequest = new StoredRequest(request)  
     this._messages.set(request.ID, storedRequest)
-    storedRequest.timeoutID = window.setTimeout((requestID) => {
+    storedRequest.timeoutID = setTimeout((requestID) => {
       storedRequest.reject(new Error(`Timeout has been expired for a message with request ID ${request.ID}`))
       this._messages.delete(requestID) // Remove request record from the map
     }, timeout)
